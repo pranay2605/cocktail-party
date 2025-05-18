@@ -3,109 +3,226 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Cocktail Night Invitation</title>
+  <title>Cocktail Party Invitation</title>
   <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Georgia', serif;
-      background: url('cocktail.jpeg');
-      background-size: cover;
-      color: #fff;
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body, html {
+      height: 100%;
+      width: 100%;
+      background: black;
+      overflow: hidden;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    pointer-particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+
+    .wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      position: relative;
+      z-index: 1;
+    }
+
+    .envelope {
+      position: relative;
+      width: 300px;
+      height: 200px;
+      cursor: pointer;
+      transition: transform 0.6s;
+    }
+
+    .envelope img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .message {
+      position: absolute;
+      top: 40%;
+      width: 100%;
+      text-align: center;
+      color: white;
+      font-size: 1rem;
+      font-weight: bold;
+      text-shadow: 0 0 5px #000;
+      padding: 0 10px;
+    }
+
+    .card {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      width: 90%;
+      max-width: 350px;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+      z-index: 2;
+      transition: transform 0.8s ease;
+    }
+
+    .card.open {
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    .invitation-text {
+      color: #000;
       text-align: center;
     }
 
-    .overlay {
-      background-color: rgba(0, 0, 0, 0.75);
-      min-height: 100vh;
-      padding: 80px 20px;
-      box-sizing: border-box;
-    }
-
-    h1 {
-      font-size: 44px;
+    .invitation-text h2 {
+      font-size: 1.5rem;
       margin-bottom: 10px;
-      color: #ffcc70;
     }
 
-    h2 {
-      font-size: 28px;
-      margin-bottom: 25px;
-      color: #fff;
-    }
-
-    .names {
-      font-size: 32px;
-      font-weight: bold;
-      margin: 20px 0;
-      color: #ffc0cb;
-    }
-
-    .details {
-      font-size: 20px;
-      margin: 20px auto;
-      max-width: 600px;
-    }
-
-    .details a {
-      color: #87cefa;
-      text-decoration: underline;
-    }
-
-    .rsvp-btn {
-      display: inline-block;
-      background: #e91e63;
-      color: white;
-      padding: 14px 28px;
-      border-radius: 30px;
-      font-size: 18px;
-      text-decoration: none;
-      margin-top: 30px;
-      transition: background 0.3s ease;
-    }
-
-    .rsvp-btn:hover {
-      background: #c2185b;
-    }
-
-    @media (max-width: 600px) {
-      h1 {
-        font-size: 32px;
-      }
-
-      h2, .names {
-        font-size: 24px;
-      }
-
-      .details {
-        font-size: 18px;
-        padding: 0 10px;
-      }
-
-      .rsvp-btn {
-        font-size: 16px;
-        padding: 12px 24px;
-      }
+    .invitation-text p {
+      font-size: 1rem;
+      margin: 5px 0;
     }
   </style>
 </head>
 <body>
-  <div class="overlay">
-    <h1>You're Cordially Invited</h1>
-    <h2>to join us for a joyous</h2>
-    <div class="names">Cocktail Evening</div>
-    <h2>in celebration of the engagement of</h2>
-    <div class="names">Praneeth ❤️ Charitha</div>
 
-    <div class="details">
-      <p><strong>Date:</strong> Sunday, June 1st, 2025</p>
-      <p><strong>Time:</strong> 6:00 PM onwards</p>
-      <p><strong>Venue:</strong> 
-        <a href="https://maps.app.goo.gl/xqaMnD4FjgJQH3BF6" target="_blank">
-            Sri SAI LUXURY HEAVEN RETREAT & CONVENTION
-        </a>
-      </p>
+  <pointer-particles></pointer-particles>
+
+  <div class="wrapper">
+    <div class="envelope" id="envelope">
+      <img src="envilope.png" alt="Envelope" />
+      <div class="message">You're invited to a Cocktail Party. Please click.</div>
+    </div>
+
+    <div class="card" id="invitationCard">
+      <div class="invitation-text">
+        <h2>Save the Date!</h2>
+        <p>Join us for a Cocktail Party</p>
+        <p><strong>After the Engagement of</strong></p>
+        <p><strong>Aarav & Meera</strong></p>
+        <p>Date: 25th May 2025</p>
+        <p>Time: 7:30 PM onwards</p>
+        <p>Venue: <a href="https://maps.google.com?q=Taj+Palace+Delhi" target="_blank">Taj Palace, New Delhi</a></p>
+      </div>
     </div>
   </div>
+
+  <script>
+    // Sparkles without pointer interaction
+    class PointerParticle {
+      constructor(spread, speed, component) {
+        const { ctx, hue } = component;
+        this.ctx = ctx;
+        this.x = Math.random() * window.innerWidth;
+        this.y = Math.random() * window.innerHeight;
+        this.size = Math.random() + 1;
+        this.decay = 0.01;
+        this.spreadX = (Math.random() - 0.5) * 4;
+        this.spreadY = (Math.random() - 0.5) * 4;
+        this.color = `hsl(${hue}deg 90% 60%)`;
+      }
+
+      draw() {
+        this.ctx.fillStyle = this.color;
+        this.ctx.beginPath();
+        this.ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        this.ctx.fill();
+      }
+
+      update() {
+        this.draw();
+        this.x += this.spreadX;
+        this.y += this.spreadY;
+        this.size -= this.decay;
+      }
+    }
+
+    class PointerParticles extends HTMLElement {
+      static register(tag = "pointer-particles") {
+        if ("customElements" in window) {
+          customElements.define(tag, this);
+        }
+      }
+
+      static css = `:host { display: grid; width: 100%; height: 100%; pointer-events: none; }`;
+
+      constructor() {
+        super();
+        this.canvas;
+        this.ctx;
+        this.fps = 60;
+        this.msPerFrame = 1000 / this.fps;
+        this.timePrevious;
+        this.particles = [];
+        this.hue = 0;
+      }
+
+      connectedCallback() {
+        const canvas = document.createElement("canvas");
+        const sheet = new CSSStyleSheet();
+        this.shadowroot = this.attachShadow({ mode: "open" });
+        sheet.replaceSync(PointerParticles.css);
+        this.shadowroot.adoptedStyleSheets = [sheet];
+        this.shadowroot.append(canvas);
+        this.canvas = this.shadowroot.querySelector("canvas");
+        this.ctx = this.canvas.getContext("2d");
+        this.setCanvasDimensions();
+        window.addEventListener("resize", () => this.setCanvasDimensions());
+        this.timePrevious = performance.now();
+        this.animateParticles();
+        setInterval(() => this.createRandomParticles(), 1000);
+      }
+
+      createRandomParticles() {
+        for (let i = 0; i < 15; i++) {
+          this.particles.push(new PointerParticle(2, 1, this));
+        }
+      }
+
+      handleParticles() {
+        for (let i = 0; i < this.particles.length; i++) {
+          this.particles[i].update();
+          if (this.particles[i].size <= 0.1) {
+            this.particles.splice(i, 1);
+            i--;
+          }
+        }
+      }
+
+      setCanvasDimensions() {
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
+      }
+
+      animateParticles() {
+        requestAnimationFrame(() => this.animateParticles());
+        const now = performance.now();
+        const elapsed = now - this.timePrevious;
+        if (elapsed < this.msPerFrame) return;
+        this.timePrevious = now - (elapsed % this.msPerFrame);
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.hue = this.hue > 360 ? 0 : (this.hue += 1);
+        this.handleParticles();
+      }
+    }
+
+    PointerParticles.register();
+
+    // Envelope click
+    const envelope = document.getElementById("envelope");
+    const card = document.getElementById("invitationCard");
+
+    envelope.addEventListener("click", () => {
+      card.classList.add("open");
+      envelope.style.display = "none";
+    });
+  </script>
 </body>
 </html>
